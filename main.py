@@ -1,13 +1,17 @@
 from flask import Flask, request, g, redirect, url_for, render_template, flash
-from dotenv import load_dotenv
+# from dotenv import load_dotenv
 import requests
 import os
 import io
 
+# FLASK_APP="main.py"
+API_URL="https://westus.api.cognitive.microsoft.com/vision/v2.0/analyze?visualFeatures=Faces&details=Celebrities&language=en"
+API_KEY="d37ec0ea33bb4d23b511a32dc2b11089"
+
 app = Flask(__name__)
-APP_ROOT = os.path.join(os.path.dirname(__file__), '..') 
-dotenv_path = os.path.join(APP_ROOT, '.env')
-load_dotenv(dotenv_path)
+# APP_ROOT = os.path.join(os.path.dirname(__file__), '..') 
+# dotenv_path = os.path.join(APP_ROOT, '.env')
+# load_dotenv(dotenv_path)
 
 @app.route('/')
 def hello_world():
@@ -21,8 +25,8 @@ def query():
 		image = request.files["file"]
 		image_data = image.read()
 		# POST A AZURE
-		url = os.getenv("API_URL")
-		api_key = os.getenv("API_KEY")
+		url = API_URL
+		api_key = API_KEY
 		headers={"Content-Type":"application/octet-stream", "Ocp-Apim-Subscription-Key":api_key}
 		azure_post = requests.post(url,headers=headers,data=image_data)
 		# azure_post es un objeto response, necesitamos parsear su data
